@@ -14,4 +14,17 @@ const checkUniqueCategory = (category, index, array) => {
 };
 const categories = items.map(mapItemToCategory).filter(checkUniqueCategory);
 
-console.log(categories);
+const obyektSNulyami = categories.reduce((acc, category) => {
+  const categorisedItems = items.filter((item) => item.category === category);
+  const totalPrice = categorisedItems.reduce((total, item) => total + item.price, 0);
+  const averagePrice = totalPrice / filterByCategory.length;
+  return {
+    ...acc,
+    [category]: averagePrice,
+  }
+}, {});
+
+
+
+
+console.log(obyektSNulyami);
