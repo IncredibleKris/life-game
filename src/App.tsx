@@ -1,11 +1,12 @@
-import { Box } from '@mui/material';
+import { CssBaseline } from '@mui/material';
+import { FC } from 'react';
+import { Task16 } from './tasks/task16';
 
-export const App = () => {
+export const App: FC = () => {
   return (
-    <Box>
-      <Box>123</Box>
-      <Box>abc</Box>
-      <Box>555fdgdf</Box>
-    </Box>
+    <>
+      <CssBaseline />
+      <Task16 />
+    </>
   );
 };
