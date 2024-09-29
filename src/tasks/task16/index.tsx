@@ -1,3 +1,7 @@
+/* eslint-disable react/jsx-key */
+import AgricultureIcon from '@mui/icons-material/Agriculture';
+import AppleIcon from '@mui/icons-material/Apple';
+import SpaIcon from '@mui/icons-material/Spa';
 import {
   Box,
   List,
@@ -8,9 +12,6 @@ import {
   TextField,
 } from '@mui/material';
 import { FC, useState } from 'react';
-import AppleIcon from '@mui/icons-material/Apple';
-import AgricultureIcon from '@mui/icons-material/Agriculture';
-import SpaIcon from '@mui/icons-material/Spa';
 
 type Category = 'dairy' | 'fruit' | 'vegetable';
 
