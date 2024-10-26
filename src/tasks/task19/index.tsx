@@ -1,32 +1,16 @@
+import BackspaceIcon from '@mui/icons-material/Backspace';
 import CloseIcon from '@mui/icons-material/Close';
-import {
-  Grid2,
-  TextField,
-  Box,
-  Paper,
-  InputAdornment,
-  Button,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Button, InputAdornment, TextField } from '@mui/material';
 import { useState } from 'react';
+import { addCharacter, deleteCharacter } from './utils/addCharacter';
+import { allCalculatorCharacters, isCalculatorCharacter } from './utils/common';
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-  ...theme.applyStyles('dark', {
-    backgroundColor: '#1A2027',
-  }),
-}));
-
-export const Task19 = () => {
+export const Calculator = () => {
   const [inputVal, setInputVal] = useState('');
 
   return (
-    <Box sx={{ width: '50%', padding: 4 }}>
-      <Grid2 container rowSpacing={3} columnSpacing={3}>
+    <Box display='flex' flexDirection='column' gap={1} margin={4} width='500px'>
+      <Box>
         <TextField
           fullWidth
           label='input'
@@ -37,6 +21,11 @@ export const Task19 = () => {
             input: {
               endAdornment: (
                 <InputAdornment position='end'>
+                  <Button
+                    onClick={() => setInputVal(deleteCharacter(inputVal))}
+                  >
+                    <BackspaceIcon fontSize='small' />
+                  </Button>
                   <Button onClick={() => setInputVal('')}>
                     <CloseIcon fontSize='small' />
                   </Button>
@@ -44,89 +33,51 @@ export const Task19 = () => {
               ),
             },
           }}
-          onChange={(event) => {
-            setInputVal(event.target.value);
+          onKeyDown={(event) => {
+            const character = event.key;
+            const position = event.target.selectionStart;
+            if (character === 'Backspace') {
+              setInputVal(deleteCharacter(inputVal));
+              return;
+            }
+            if (!isCalculatorCharacter(character)) {
+              return;
+            }
+            const newInputVal = addCharacter(inputVal, character);
+            setInputVal(newInputVal);
           }}
-          
         />
-        <Grid2 size={4}>
-          <Item>
-            <Button fullWidth onClick={() => setInputVal(inputVal + '1')}>
-              1
+      </Box>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gridTemplateAreas: `
+            'one two three plus'
+            'four five six minus'
+            'seven eight nine multiply'
+            'brackets zero dot divide'
+            'equals equals equals equals'
+          `,
+          gap: 1,
+        }}
+      >
+        {Object.entries(allCalculatorCharacters).map(([key, value]) => {
+          return (
+            <Button
+              key={key}
+              variant='outlined'
+              sx={{ gridArea: key }}
+              onClick={() => {
+                const newInputVal = addCharacter(inputVal, value);
+                setInputVal(newInputVal);
+              }}
+            >
+              {value}
             </Button>
-          </Item>
-        </Grid2>
-        <Grid2 size={4}>
-          <Item>
-            <Button fullWidth>2</Button>
-          </Item>
-        </Grid2>
-        <Grid2 size={4}>
-          <Item>
-            <Button fullWidth>3</Button>
-          </Item>
-        </Grid2>
-        <Grid2 size={4}>
-          <Item>
-            <Button fullWidth>4</Button>
-          </Item>
-        </Grid2>
-        <Grid2 size={4}>
-          <Item>
-            <Button fullWidth>5</Button>
-          </Item>
-        </Grid2>
-        <Grid2 size={4}>
-          <Item>
-            <Button fullWidth>6</Button>
-          </Item>
-        </Grid2>
-        <Grid2 size={4}>
-          <Item>
-            <Button fullWidth>7</Button>
-          </Item>
-        </Grid2>
-        <Grid2 size={4}>
-          <Item>
-            <Button fullWidth>8</Button>
-          </Item>
-        </Grid2>
-        <Grid2 size={4}>
-          <Item>
-            <Button fullWidth>9</Button>
-          </Item>
-        </Grid2>
-        <Grid2 size={2}>
-          <Item>
-            <Button fullWidth>+</Button>
-          </Item>
-        </Grid2>
-        <Grid2 size={2}>
-          <Item>
-            <Button fullWidth>-</Button>
-          </Item>
-        </Grid2>
-        <Grid2 size={4}>
-          <Item>
-            <Button fullWidth>0</Button>
-          </Item>
-        </Grid2>
-        <Grid2 size={2}>
-          <Item>
-            <Button fullWidth>x</Button>
-          </Item>
-        </Grid2>
-        <Grid2 size={2}>
-          <Item>
-            <Button fullWidth>/</Button>
-          </Item>
-        </Grid2>
-        <Grid2 size={12}>
-          <Item>
-            <Button fullWidth>=</Button>
-          </Item>
-        </Grid2>
-      </Grid2>
+          );
+        })}
+      </Box>
     </Box>
   );
 };
